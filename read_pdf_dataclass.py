@@ -8,6 +8,7 @@ class ParsingPDF:
     key_name_person = 'Отримувач'
     key_tin = 'ІПН'
     page_number = 1
+    re_tin = '\s\d{10}'
 
     @staticmethod
     def find_name():
@@ -21,7 +22,7 @@ class ParsingPDF:
     def find_tin():
         doc = fitz.open(ParsingPDF.doc_pdf)
         text = doc.get_page_text(ParsingPDF.page_number - 1)
-        tin_person_list = re.findall(fr'{ParsingPDF.key_tin}:\s\d\d\d\d\d\d\d\d\d\d\b', text)
+        tin_person_list = re.findall(fr'{ParsingPDF.key_tin}:{ParsingPDF.re_tin}', text)
         tin_person = re.sub(fr'{ParsingPDF.key_tin}: ', r'', tin_person_list[0])
         return tin_person
 

@@ -3,6 +3,7 @@ import re
 
 
 class ParsingPDF:
+    re_tin = '\s\d{10}'
 
     def __init__(self, doc_pdf: str, key_name_person: str, key_tin: str, page_number: int):
         self.doc_pdf = doc_pdf
@@ -20,13 +21,12 @@ class ParsingPDF:
     def find_tin(self):
         doc = fitz.open(self.doc_pdf)
         text = doc.get_page_text(self.page_number - 1)
-        tin_person_list = re.findall(fr'{self.key_tin}:\s\d\d\d\d\d\d\d\d\d\d\b', text)
+        tin_person_list = re.findall(fr'{self.key_tin}:{ParsingPDF.re_tin}', text)
         tin_person = re.sub(fr'{self.key_tin}: ', r'', tin_person_list[0])
         return tin_person
 
 
 class DataPerson:
-
     x = ParsingPDF('Vypyska CredCard.pdf', 'Отримувач', 'ІПН', 1)
     dict_of_persons = {'first_name': '',
                        'last_name': '',
@@ -44,6 +44,3 @@ a = DataPerson
 
 if __name__ == '__main__':
     print(a.create_dict())
-
-
-
